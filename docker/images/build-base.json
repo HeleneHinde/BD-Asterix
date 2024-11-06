@@ -1,0 +1,9 @@
+{
+  "images": [
+    {
+      "service": "php",
+      "name": "base-php",
+      "version": "8.3-fpm-alpine"
+    }
+  ]
+}
