@@ -2,22 +2,26 @@
 
 namespace App\Entity;
 
+use App\Repository\PokemonRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use phpDocumentor\Reflection\Types\Collection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity(repositoryClass: PokemonRepository::class)]
 class Pokemon
 {
+    #[ORM\Id]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+    private ?string $name = null;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection<int, Type>
+     * @var Collection<int, Type>
      */
     #[ORM\ManyToMany(targetEntity: Type::class, inversedBy: 'pokemons')]
-    private \Doctrine\Common\Collections\Collection $types;
+    private Collection $types;
 
     public function __construct()
     {
@@ -36,22 +40,22 @@ class Pokemon
         return $this;
     }
 
-    public function getNom(): ?string
+    public function getName(): ?string
     {
-        return $this->nom;
+        return $this->name;
     }
 
-    public function setNom(string $nom): static
+    public function setName(string $name): static
     {
-        $this->nom = $nom;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection<int, Type>
+     * @return Collection<int, Type>
      */
-    public function getTypes(): \Doctrine\Common\Collections\Collection
+    public function getTypes(): Collection
     {
         return $this->types;
     }
