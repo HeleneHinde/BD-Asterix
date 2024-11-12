@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     && docker-php-ext-install intl pdo pdo_mysql zip opcache
 
+RUN apt-get update && apt-get install -y default-mysql-client
+
 # Copier le fichier de configuration Apache
 COPY docker/images/symfony.conf /etc/apache2/sites-available/symfony.conf
 
