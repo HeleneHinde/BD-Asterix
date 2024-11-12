@@ -1,0 +1,17 @@
+# Ignorer les répertoires générés automatiquement
+/vendor
+/var/cache
+/var/log
+/var/sessions
+
+# Ignorer les fichiers de configuration locaux
+/.env.local
+/.env.local.php
+/.env.test.local
+
+# Ignorer les fichiers git
+/.git
+/.gitignore
+
+# Ignorer les fichiers de dépendances (node)
+/node_modules
