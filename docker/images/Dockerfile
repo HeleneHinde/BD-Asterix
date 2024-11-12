@@ -6,11 +6,10 @@ RUN apt-get update && apt-get install -y \
     git \
     unzip \
     libicu-dev \
-    libpq-dev \
     libzip-dev \
+    curl \
+    default-mysql-client \
     && docker-php-ext-install intl pdo pdo_mysql zip opcache
-
-RUN apt-get update && apt-get install -y default-mysql-client
 
 # Copier le fichier de configuration Apache
 COPY docker/images/symfony.conf /etc/apache2/sites-available/symfony.conf
@@ -33,8 +32,14 @@ COPY . /var/www/html
 # Donner les permissions au dossier
 RUN chown -R www-data:www-data /var/www/html
 
-# Exposer le port par défaut d'Apache
-EXPOSE 80
+# Téléchargez et installez Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN su www-data -s /bin/bash -c "composer install"
 
-# Lancer le serveur Apache
+# Copier le script d’entrée
+COPY docker/entrypoint/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Utiliser le script d’entrée
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
