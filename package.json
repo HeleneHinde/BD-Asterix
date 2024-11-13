@@ -6,7 +6,10 @@
         "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/assets",
         "@symfony/webpack-encore": "^5.0.0",
         "core-js": "^3.38.0",
+        "file-loader": "^6.0.0",
         "regenerator-runtime": "^0.13.9",
+        "sass": "^1.80.7",
+        "sass-loader": "^16.0.1",
         "webpack": "^5.74.0",
         "webpack-cli": "^5.1.0",
         "webpack-notifier": "^1.15.0"
