@@ -1,4 +1,5 @@
 const Encore = require('@symfony/webpack-encore');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -13,7 +14,6 @@ Encore
     .setPublicPath('/build')
     // only needed for CDN's or subdirectory deploy
     //.setManifestKeyPrefix('build/')
-
     /*
      * ENTRY CONFIG
      *
@@ -24,6 +24,9 @@ Encore
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
+
+    // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
+    .enableStimulusBridge('./assets/controllers.json')
 
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
@@ -68,6 +71,17 @@ Encore
 
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
+
+    .addPlugin(
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: './assets/images',
+                    to: 'images/[path][name][ext]',
+                },
+            ],
+        })
+    )
 ;
 
 module.exports = Encore.getWebpackConfig();
