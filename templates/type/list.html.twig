@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Types List{% endblock %}
+
+{% block body %}
+    <table>
+        {% for type in types|batch(2) %}
+            <tr>
+                {% for item in type %}
+                    <td>
+                        <img src="{{ item.image }}" alt="{{ item.name }}" style="width: 50px; height: 50px;">
+                    </td>
+                    <td>
+                        <p>{{ item.name }}</p>
+                    </td>
+                {% endfor %}
+                {% if type|length < 2 %}
+                    <td>
+                        <img src="{{ item.image }}" alt="{{ item.name }}" style="width: 50px; height: 50px;">
+                    </td>
+                    <td>
+                        <p>{{ item.name }}</p>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
