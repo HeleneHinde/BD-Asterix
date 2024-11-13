@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+  width: 800px;
+  height: calc(100vh - 140px);
+  background-color: white;
+}
+
+body {
+  background-image: url('/assets/images/base/body_bg.png');
+  margin: 0;
+}

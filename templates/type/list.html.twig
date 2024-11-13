@@ -3,6 +3,7 @@
 {% block title %}Types List{% endblock %}
 
 {% block body %}
+    <div class="container container__type-list">
     <table>
         {% for type in types|batch(2) %}
             <tr>
@@ -25,5 +26,5 @@
             </tr>
         {% endfor %}
     </table>
-
+    </div>
 {% endblock %}
