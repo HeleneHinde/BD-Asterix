@@ -11,6 +11,13 @@ RUN apt-get update && apt-get install -y \
     default-mysql-client \
     && docker-php-ext-install intl pdo pdo_mysql zip opcache
 
+# Installer Node.js et npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs
+
+# Installer Yarn via npm
+RUN npm install --global yarn
+
 # Copier le fichier de configuration Apache
 COPY docker/images/symfony.conf /etc/apache2/sites-available/symfony.conf
 
@@ -36,10 +43,4 @@ RUN chown -R www-data:www-data /var/www/html
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN su www-data -s /bin/bash -c "composer install"
 
-# Copier le script d’entrée
-COPY docker/entrypoint/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-# Utiliser le script d’entrée
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["apache2-foreground"]
+# Copier le script 
