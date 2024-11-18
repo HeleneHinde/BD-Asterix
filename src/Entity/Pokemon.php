@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Pokemon
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
@@ -22,6 +23,9 @@ class Pokemon
      */
     #[ORM\ManyToMany(targetEntity: Type::class, inversedBy: 'pokemons')]
     private Collection $types;
+
+    #[ORM\Column]
+    private ?int $idPokedex = null;
 
     public function __construct()
     {
@@ -72,6 +76,18 @@ class Pokemon
     public function removeType(Type $type): static
     {
         $this->types->removeElement($type);
+
+        return $this;
+    }
+
+    public function getIdPokedex(): ?int
+    {
+        return $this->idPokedex;
+    }
+
+    public function setIdPokedex(int $idPokedex): static
+    {
+        $this->idPokedex = $idPokedex;
 
         return $this;
     }
