@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Entity\Type; // Remplacez par votre entité
+use App\Entity\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
