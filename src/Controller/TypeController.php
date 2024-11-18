@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class TypeController extends AbstractController
 {
-    #[Route('/type', name: 'app_type')]
+    #[Route('/type', name: 'list_type')]
     public function list(TypeRepository $typeRepository): Response
     {
 

@@ -1,14 +1,23 @@
 @use "./base/variables" as *;
 
-.navbar{
-  &-container{
+.navbar {
+  &-container {
     background-color: $white;
 
   }
 
-  &__link{
+  &__link {
+    width: 100px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    &-container{
+    &:hover {
+      background-color: $grey;
+    }
+
+    &-container {
       display: flex;
       justify-content: center;
       list-style-type: none;

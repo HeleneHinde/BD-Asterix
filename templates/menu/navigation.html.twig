@@ -1,9 +1,11 @@
-    <header>
-        <nav class="navbar-container">
-            <ul class="navbar__link-container">
-                <li class="navabr__link">{{ 'type' | trans }}</li>
-                <li class="navabr__link">{{ 'pokedex' | trans }}</li>
-                <li class="navabr__link"></li>
-            </ul>
-        </nav>
-    </header>
+<header>
+    <nav class="navbar-container">
+        <ul class="navbar__link-container">
+            <a href="{{ path('list_type') }}">
+                <li class="navbar__link"> {{ 'type' | trans }}</li>
+            </a>
+            <li class="navbar__link">{{ 'pokedex' | trans }}</li>
+            <li class="navbar__link"></li>
+        </ul>
+    </nav>
+</header>
