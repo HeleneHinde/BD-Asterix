@@ -1,0 +1,19 @@
+@use "./base/variables" as *;
+
+.navbar{
+  &-container{
+    background-color: $white;
+
+  }
+
+  &__link{
+
+    &-container{
+      display: flex;
+      justify-content: center;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
