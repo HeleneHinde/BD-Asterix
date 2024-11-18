@@ -54,8 +54,7 @@ class PopulateDatabaseFromApiCommand extends Command
                 $output->writeln('<error>Failed to fetch data. HTTP status code: ' . $response->getStatusCode() . '</error>');
                 return Command::FAILURE;
             }
-
-            //transforme le JSON en array
+            //Transforme le JSON en array
             $data = $response->toArray();
             $output->writeln('Data fetched successfully.');
 
