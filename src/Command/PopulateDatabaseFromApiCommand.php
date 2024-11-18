@@ -86,6 +86,8 @@ class PopulateDatabaseFromApiCommand extends Command
             $output->writeln('<error>Error: ' . $e->getMessage() . '</error>');
             return Command::FAILURE;
         } catch (TransportExceptionInterface $e) {
+            $output->writeln('<error>Error: ' . $e->getMessage() . '</error>');
+            return Command::FAILURE;
         }
     }
 }
