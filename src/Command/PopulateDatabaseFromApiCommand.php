@@ -39,6 +39,7 @@ class PopulateDatabaseFromApiCommand extends Command
     {
         $output->writeln('Fetching data from the API...');
 
+        //Call l'api
         $url = 'https://tyradex.app/api/v1/types';
         try {
             $response = $this->httpClient->request('GET', $url, [
@@ -54,6 +55,7 @@ class PopulateDatabaseFromApiCommand extends Command
                 return Command::FAILURE;
             }
 
+            //transforme le JSON en array
             $data = $response->toArray();
             $output->writeln('Data fetched successfully.');
 
@@ -67,15 +69,15 @@ class PopulateDatabaseFromApiCommand extends Command
                     continue;
                 }
 
-                // Créez et persistez l'entité
+                // Crée et persiste l'entité
                 $typeEntity = new Type();
                 $typeEntity->setName($type['name']['fr']);
-                $typeEntity->setImage($type['sprites']); // Adaptez selon votre structure d'entité
+                $typeEntity->setImage($type['sprites']);
 
                 $this->entityManager->persist($typeEntity);
             }
 
-            // Sauvegardez les changements
+            // Sauvegarde les changements
             $this->entityManager->flush();
             $output->writeln('<info>Database has been populated successfully!</info>');
 
