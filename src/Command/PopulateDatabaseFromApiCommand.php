@@ -17,7 +17,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 )]
 class PopulateDatabaseFromApiCommand extends Command
 {
-    protected static $defaultName = 'app:populate-database';
     private HttpClientInterface $httpClient;
     private EntityManagerInterface $entityManager;
 
@@ -31,7 +30,6 @@ class PopulateDatabaseFromApiCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Populate the database with data from an external API.')
             ->setHelp('This command fetches data from an API and saves it into the database.');
     }
 
