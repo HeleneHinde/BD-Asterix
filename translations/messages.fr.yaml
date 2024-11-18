@@ -2,6 +2,7 @@
 type: Type
 list: Liste
 pokemon: Pokémon
+pokedex: Pokédex
 
 #Type List
 type.list: Liste des types
