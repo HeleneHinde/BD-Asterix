@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Albums{% endblock %}
+
+{% block body %}
+
+<div class="table-container">
+    <h1>Liste des albums Astérix de Camille</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Titre</th>
+                <th>Date de sortie</th>
+                <th>Genre</th>
+                <th>Possédé ?</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for album in albums %}
+                <tr>
+                    <td>
+                    <img src="{{ album.image }}" alt="{{ album.title }}" class="img-thumbnail" style="width: 100px; height: auto;"></td>
+                    <td>{{ album.title }}</td>
+                    <td>{{ album.date|date('Y') }}</td>
+                    <td>{{ album.genre.name }}</td>
+                    <td>
+                    {% if album.owned %}
+                        <img src="{{ asset('build/images/logo/ok.png') }}" alt="Possédé" class="img-thumbnail" style="width: 20px; height: auto;">
+                    {% else %}
+                        <img src="{{ asset('build/images/logo/no.png') }}" alt="Non possédé" class="img-thumbnail" style="width: 20px; height: auto;">
+                    {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

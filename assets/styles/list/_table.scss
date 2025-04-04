@@ -1,0 +1,53 @@
+@use "../base/variables" as *;
+
+.table {
+    border-collapse: collapse;
+    background-color: $white;
+    margin: 20px 100px 0px 60px;
+
+    &-container {
+        margin: 0 0 0 40px;
+    }
+
+    // Header styling
+    thead {
+        background-color: $black;
+        
+        th {
+            color: $white;
+            padding: 15px;
+            text-align: left;
+            font-family: Comic, sans-serif;
+            font-size: 1.2em;
+        }
+    }
+
+    // Body styling
+    tbody {
+        tr {
+            border-bottom: 1px solid $grey;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: rgba($grey, 0.1);
+            }
+        }
+
+        td {
+            padding: 12px 15px;
+            vertical-align: middle;
+
+            // First column with image
+            &:first-child {
+                width: 80px;
+                
+                img {
+                    width: 60px;
+                    height: 60px;
+                    object-fit: cover;
+                    border-radius: 4px;
+                }
+            }
+        }
+    }
+}

@@ -8,8 +8,10 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     libzip-dev \
     curl \
-    default-mysql-client \
-    && docker-php-ext-install intl pdo pdo_mysql zip opcache
+    sqlite3 \
+    libsqlite3-dev \
+    && docker-php-ext-install intl pdo pdo_sqlite zip opcache \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Installer Node.js et npm
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
@@ -39,8 +41,12 @@ COPY . /var/www/html
 # Donner les permissions au dossier
 RUN chown -R www-data:www-data /var/www/html
 
-# Téléchargez et installez Composer
+# Télécharger et installer Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN su www-data -s /bin/bash -c "composer install"
 
-# Copier le script 
+# Créer le fichier SQLite
+RUN mkdir -p /var/www/html/var/data && touch /var/www/html/var/data/bd.sqlite
+
+# Assurer les bonnes permissions pour le fichier SQLite
+RUN chown -R www-data:www-data /var/www/html/var/data

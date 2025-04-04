@@ -1,10 +1,12 @@
 @forward "font";
 
 h1 {
-  font-family: Pokemon;
+  font-family: Comic;
   letter-spacing: 3px;
+  font-size: 2em;
 }
 
 body {
   font-family: Roboto, serif;
+  line-height: 1.5;
 }

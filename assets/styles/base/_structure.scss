@@ -10,11 +10,21 @@
 }
 
 body {
-  background-image: url('/assets/images/base/body_bg.png');
+  background-image: url('/assets/images/base/fond-obelix-menhir.jpg');
   margin: 0;
+  background-size: cover;            /* L'image couvre toute la fenêtre */
+  background-attachment: fixed;      /* L'image reste fixe lors du scroll */
+  background-position: center;       /* Centrer l'image */
+  background-repeat: no-repeat;      /* Pas de répétition */
+  height: 100vh;     
 }
 
 a {
   text-decoration: none;
   color: $black;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: $primary;
 }

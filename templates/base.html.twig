@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="{{ asset('build/images/pokeball.png') }}">
+        <link rel="icon" href="{{ asset('build/images/logo-rond-asterix.gif') }}">
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
@@ -14,7 +14,6 @@
     </head>
     <body>
     {% include 'menu/navigation.html.twig' %}
-    <h1>Pokémon !</h1>
         {% block body %}{% endblock %}
     </body>
 </html>

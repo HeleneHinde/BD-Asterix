@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+
+    <h1>Connexion</h1>
+    <p>Cliquez sur le bouton ci-dessous pour vous connecter :</p>
+    <a href="{{ path('oidc_check') }}" class="btn">Se connecter</a>
+
+{% endblock %}
