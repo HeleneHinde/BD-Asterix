@@ -45,37 +45,37 @@ class AlbumAuthenticator extends AbstractAuthenticator
     {
         try {
             $this->logger->info('Tentative d\'authentification OIDC avec code');
-            
+
             // Récupère le code d'autorisation de la requête
             $code = $request->query->get('code');
-            
+
             if (!$code) {
                 $this->logger->error('Pas de code d\'autorisation dans la requête');
                 throw new AuthenticationException('No authorization code present in the request');
             }
-            
+
             // Échange le code contre un jeton d'accès
             $accessToken = $this->oidcProvider->getAccessToken('authorization_code', [
                 'code' => $code,
             ]);
-            
+
             $this->logger->info('Token d\'accès obtenu avec succès');
-            
+
             // Récupère les informations de l'utilisateur
             $resourceOwner = $this->oidcProvider->getResourceOwner($accessToken);
             $userData = $resourceOwner->toArray();
-            
+
             $this->logger->info('Utilisateur OIDC récupéré: ' . json_encode($userData));
-            
+
             // Extraire l'identifiant unique de l'utilisateur
             // Pour Synology DSM, vérifier la structure exacte
             $userId = $userData['id'] ?? $userData['sub'] ?? $userData['username'] ?? $userData['email'] ?? null;
-            
+
             if (!$userId) {
                 $this->logger->error('Impossible de déterminer l\'identifiant de l\'utilisateur depuis: ' . json_encode($userData));
                 throw new AuthenticationException('No user identifier found in the OIDC response');
             }
-            
+
             return new SelfValidatingPassport(new UserBadge($userId, function () use ($userId, $userData) {
                 $this->logger->info('Chargement de l\'utilisateur avec l\'identifiant: ' . $userId);
                 return $this->userProvider->loadUserByIdentifier($userId);

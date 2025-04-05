@@ -13,6 +13,13 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    # Explicitly define the AlbumAuthenticator service with its dependencies
+    App\Security\AlbumAuthenticator:
+        arguments:
+            $oidcProvider: '@League\OAuth2\Client\Provider\GenericProvider'
+            $userProvider: '@App\Security\OidcUserProvider'
+            $logger: '@logger'
+
     # Explicitly define the OidcUserProvider service
     App\Security\OidcUserProvider:
         arguments:

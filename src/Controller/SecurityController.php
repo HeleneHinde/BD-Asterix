@@ -8,20 +8,13 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use League\OAuth2\Client\Provider\GenericProvider;
-use Psr\Log\LoggerInterface;
 
 class SecurityController extends AbstractController
 {
-    private LoggerInterface $logger;
-
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
-
     #[Route('/login', name: 'oidc_login')]
     public function login(): Response
     {
+        // Rendu simple du template de login
         return $this->render('security/login.html.twig');
     }
 
@@ -34,34 +27,7 @@ class SecurityController extends AbstractController
     #[Route('/oidc-check', name: 'oidc_check')]
     public function oidcCheck(Request $request): Response
     {
-        $error = $request->query->get('error');
-        $code = $request->query->get('code');
-        $state = $request->query->get('state');
-        $sessionState = $request->getSession()->get('oauth2state');
-
-        // Vérifier si une erreur est renvoyée par le serveur d'autorisation
-        if ($error) {
-            $this->logger->error('Erreur OIDC: ' . $error);
-            $this->addFlash('error', 'Échec de l\'authentification: ' . $error);
-            return $this->redirectToRoute('oidc_login');
-        }
-
-        // Vérifier que le code est présent
-        if (!$code) {
-            $this->logger->error('Pas de code d\'autorisation reçu');
-            $this->addFlash('error', 'Pas de code d\'autorisation reçu');
-            return $this->redirectToRoute('oidc_login');
-        }
-
-        // Vérifier que le state est valide (protection CSRF)
-        if (!$state || $state !== $sessionState) {
-            $this->logger->error('State invalide, possible attaque CSRF');
-            $request->getSession()->remove('oauth2state');
-            $this->addFlash('error', 'État de session invalide, veuillez réessayer');
-            return $this->redirectToRoute('oidc_login');
-        }
-
-        // L'authenticator prendra le relais à partir d'ici
+        // Simple réponse pour test
         return new Response('Authentification en cours...');
     }
 
@@ -76,7 +42,6 @@ class SecurityController extends AbstractController
                 'urlAuthorize' => $_ENV['OIDC_URL_AUTHORIZE'],
                 'urlAccessToken' => $_ENV['OIDC_URL_ACCESS_TOKEN'],
                 'urlResourceOwnerDetails' => $_ENV['OIDC_URL_RESOURCE_OWNER'],
-                'responseResourceOwnerId' => 'id',  // Utilise 'id' comme champ d'identifiant
             ]);
 
             // Génère l'URL d'autorisation avec les scopes
@@ -85,15 +50,13 @@ class SecurityController extends AbstractController
                 'response_type' => 'code',
             ]);
 
-            // Enregistre le state dans la session pour éviter les attaques CSRF
+            // Enregistre le state dans la session
             $request->getSession()->set('oauth2state', $provider->getState());
-
-            $this->logger->info('Redirection vers le serveur d\'autorisation: ' . $authorizationUrl);
 
             return new RedirectResponse($authorizationUrl);
         } catch (\Exception $e) {
-            $this->logger->error('Erreur lors de la redirection vers le serveur d\'autorisation: ' . $e->getMessage());
-            $this->addFlash('error', 'Erreur de configuration OIDC: ' . $e->getMessage());
+            // Simple redirection en cas d'erreur
+            $this->addFlash('error', 'Erreur: ' . $e->getMessage());
             return $this->redirectToRoute('oidc_login');
         }
     }
