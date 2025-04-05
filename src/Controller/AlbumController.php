@@ -11,7 +11,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AlbumController extends AbstractController
 {
     #[IsGranted('ROLE_USER')]
-    #[Route('/album', name: 'app_album')]
+    #[Route('/', name: 'app_album')]
     public function listAlbums(AlbumRepository $albumRepository): Response
     {
         // Fetch all albums from the repository
