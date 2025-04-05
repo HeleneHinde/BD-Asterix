@@ -8,31 +8,22 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use League\OAuth2\Client\Provider\GenericProvider;
-
+use Psr\Log\LoggerInterface;
 
 class SecurityController extends AbstractController
 {
-    // #[Route(path: '/login', name: 'app_login')]
-    // public function login(AuthenticationUtils $authenticationUtils): Response
-    // {
-    //     // get the login error if there is one
-    //     $error = $authenticationUtils->getLastAuthenticationError();
+    private LoggerInterface $logger;
 
-    //     // last username entered by the user
-    //     $lastUsername = $authenticationUtils->getLastUsername();
-
-    //     return $this->render('security/login.html.twig', [
-    //         'last_username' => $lastUsername,
-    //         'error' => $error,
-    //     ]);
-    // }
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
 
     #[Route('/login', name: 'oidc_login')]
     public function login(): Response
     {
         return $this->render('security/login.html.twig');
     }
-
 
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
@@ -41,31 +32,69 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/oidc-check', name: 'oidc_check')]
-    public function oidcCheck(): void
+    public function oidcCheck(Request $request): Response
     {
-        // Cette méthode peut rester vide, car le processus d'authentification est géré automatiquement.
+        $error = $request->query->get('error');
+        $code = $request->query->get('code');
+        $state = $request->query->get('state');
+        $sessionState = $request->getSession()->get('oauth2state');
+
+        // Vérifier si une erreur est renvoyée par le serveur d'autorisation
+        if ($error) {
+            $this->logger->error('Erreur OIDC: ' . $error);
+            $this->addFlash('error', 'Échec de l\'authentification: ' . $error);
+            return $this->redirectToRoute('oidc_login');
+        }
+
+        // Vérifier que le code est présent
+        if (!$code) {
+            $this->logger->error('Pas de code d\'autorisation reçu');
+            $this->addFlash('error', 'Pas de code d\'autorisation reçu');
+            return $this->redirectToRoute('oidc_login');
+        }
+
+        // Vérifier que le state est valide (protection CSRF)
+        if (!$state || $state !== $sessionState) {
+            $this->logger->error('State invalide, possible attaque CSRF');
+            $request->getSession()->remove('oauth2state');
+            $this->addFlash('error', 'État de session invalide, veuillez réessayer');
+            return $this->redirectToRoute('oidc_login');
+        }
+
+        // L'authenticator prendra le relais à partir d'ici
+        return new Response('Authentification en cours...');
     }
 
     #[Route('/oidc-start', name: 'oidc_start')]
     public function startOidc(Request $request): RedirectResponse
     {
-        $provider = new GenericProvider([
-            'clientId' => $_ENV['OIDC_CLIENT_ID'],
-            'clientSecret' => $_ENV['OIDC_CLIENT_SECRET'],
-            'redirectUri' => $_ENV['OIDC_REDIRECT_URI'],
-            'urlAuthorize' => $_ENV['OIDC_URL_AUTHORIZE'],
-            'urlAccessToken' => $_ENV['OIDC_URL_ACCESS_TOKEN'],
-            'urlResourceOwnerDetails' => $_ENV['OIDC_URL_RESOURCE_OWNER'],
-        ]);
+        try {
+            $provider = new GenericProvider([
+                'clientId' => $_ENV['OIDC_CLIENT_ID'],
+                'clientSecret' => $_ENV['OIDC_CLIENT_SECRET'],
+                'redirectUri' => $_ENV['OIDC_REDIRECT_URI'],
+                'urlAuthorize' => $_ENV['OIDC_URL_AUTHORIZE'],
+                'urlAccessToken' => $_ENV['OIDC_URL_ACCESS_TOKEN'],
+                'urlResourceOwnerDetails' => $_ENV['OIDC_URL_RESOURCE_OWNER'],
+                'responseResourceOwnerId' => 'id',  // Utilise 'id' comme champ d'identifiant
+            ]);
 
-        // Génère l'URL d'autorisation avec les scopes
-        $authorizationUrl = $provider->getAuthorizationUrl([
-            'scope' => 'openid email groups',
-        ]);
+            // Génère l'URL d'autorisation avec les scopes
+            $authorizationUrl = $provider->getAuthorizationUrl([
+                'scope' => 'openid email profile',
+                'response_type' => 'code',
+            ]);
 
-        // Enregistre le state dans la session pour éviter les attaques CSRF
-        $request->getSession()->set('oauth2state', $provider->getState());
+            // Enregistre le state dans la session pour éviter les attaques CSRF
+            $request->getSession()->set('oauth2state', $provider->getState());
 
-        return new RedirectResponse($authorizationUrl);
+            $this->logger->info('Redirection vers le serveur d\'autorisation: ' . $authorizationUrl);
+
+            return new RedirectResponse($authorizationUrl);
+        } catch (\Exception $e) {
+            $this->logger->error('Erreur lors de la redirection vers le serveur d\'autorisation: ' . $e->getMessage());
+            $this->addFlash('error', 'Erreur de configuration OIDC: ' . $e->getMessage());
+            return $this->redirectToRoute('oidc_login');
+        }
     }
 }
