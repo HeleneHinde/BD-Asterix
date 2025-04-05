@@ -14,15 +14,17 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            pattern: ^/
             custom_authenticators:
                 - App\Security\AlbumAuthenticator
             logout:
                 path: app_logout
-            stateless: true
+            # autres options éventuelles…
+
     access_control:
-        - { path: ^/login$, role: PUBLIC_ACCESS }
         - { path: ^/oidc-check, roles: PUBLIC_ACCESS }
-        - { path: ^/, roles: ROLE_USER }
+        - { path: ^/oidc-start, roles: PUBLIC_ACCESS }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
 
 when@test:
     security:

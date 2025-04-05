@@ -5,7 +5,10 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use League\OAuth2\Client\Provider\GenericProvider;
+
 
 class SecurityController extends AbstractController
 {
@@ -36,10 +39,30 @@ class SecurityController extends AbstractController
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
-    
+
     #[Route('/oidc-check', name: 'oidc_check')]
     public function oidcCheck(): void
     {
         // Cette méthode peut rester vide, car le processus d'authentification est géré automatiquement.
+    }
+
+    #[Route('/oidc-start', name: 'oidc_start')]
+    public function startOidc(Request $request): RedirectResponse
+    {
+        $provider = new GenericProvider([
+            'clientId' => $_ENV['OIDC_CLIENT_ID'],
+            'clientSecret' => $_ENV['OIDC_CLIENT_SECRET'],
+            'redirectUri' => $_ENV['OIDC_REDIRECT_URI'],
+            'urlAuthorize' => $_ENV['OIDC_URL_AUTHORIZE'],
+            'urlAccessToken' => $_ENV['OIDC_URL_ACCESS_TOKEN'],
+            'urlResourceOwnerDetails' => $_ENV['OIDC_URL_RESOURCE_OWNER'],
+        ]);
+
+        $authorizationUrl = $provider->getAuthorizationUrl();
+
+        // Enregistre le state dans la session pour éviter les attaques CSRF
+        $request->getSession()->set('oauth2state', $provider->getState());
+
+        return new RedirectResponse($authorizationUrl);
     }
 }
