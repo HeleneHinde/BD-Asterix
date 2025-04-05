@@ -41,12 +41,31 @@ COPY . /var/www/html
 # Donner les permissions au dossier
 RUN chown -R www-data:www-data /var/www/html
 
+# Définir des variables d'environnement pour le build
+ENV APP_ENV=prod \
+    APP_DEBUG=0 \
+    APP_SECRET=temporary_secret_for_build \
+    MESSENGER_TRANSPORT_DSN=doctrine://default \
+    APP_NO_DOT_ENV=1
+
 # Télécharger et installer Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN su www-data -s /bin/bash -c "composer install"
+RUN su www-data -s /bin/bash -c "composer install --no-scripts"
+RUN su www-data -s /bin/bash -c "composer run-script post-install-cmd --no-interaction || true"
 
 # Créer le fichier SQLite
 RUN mkdir -p /var/www/html/var/data && touch /var/www/html/var/data/bd.sqlite
 
 # Assurer les bonnes permissions pour le fichier SQLite
 RUN chown -R www-data:www-data /var/www/html/var/data
+
+# Construire les assets
+RUN su www-data -s /bin/bash -c "yarn install && yarn build"
+
+# Copier l'entrypoint et le rendre exécutable
+COPY docker/entrypoint/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Définir l'entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["apache2-foreground"]

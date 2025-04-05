@@ -1,4 +1,4 @@
-name: Build and Test CI
+name: CI Build Without Env Files
 
 on:
   push:
@@ -9,6 +9,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env:
+      APP_ENV: prod
+      APP_DEBUG: 0
+      APP_SECRET: ${{ secrets.APP_SECRET || 'github_ci_temporary_secret' }}
+      MESSENGER_TRANSPORT_DSN: doctrine://default
+      DATABASE_URL: "sqlite:///%kernel.project_dir%/var/data/bd.sqlite"
+      APP_NO_DOT_ENV: 1
 
     steps:
     - name: Checkout code
@@ -30,13 +38,13 @@ jobs:
     - name: Install PHP dependencies
       run: composer install --prefer-dist --no-progress --no-interaction
 
-    - name: Build assets for CI
-      env:
-        APP_ENV: prod
-        APP_SECRET: ${{ secrets.APP_SECRET || 'temporarysecretforcibuilds' }}
-        MESSENGER_TRANSPORT_DSN: ${{ secrets.MESSENGER_TRANSPORT_DSN || 'doctrine://default' }}
-        # Ajoutez ici d'autres variables requises via secrets GitHub
-      run: yarn build:ci
+    - name: Build assets
+      run: |
+        yarn install
+        yarn build
+
+    - name: Test application bootstrap
+      run: php bin/console cache:clear --no-warmup
 
     - name: Cache build artifacts
       uses: actions/upload-artifact@v3
