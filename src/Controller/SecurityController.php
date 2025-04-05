@@ -58,7 +58,10 @@ class SecurityController extends AbstractController
             'urlResourceOwnerDetails' => $_ENV['OIDC_URL_RESOURCE_OWNER'],
         ]);
 
-        $authorizationUrl = $provider->getAuthorizationUrl();
+        // Génère l'URL d'autorisation avec les scopes
+        $authorizationUrl = $provider->getAuthorizationUrl([
+            'scope' => 'openid email groups',
+        ]);
 
         // Enregistre le state dans la session pour éviter les attaques CSRF
         $request->getSession()->set('oauth2state', $provider->getState());
