@@ -1,0 +1,32 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show current directory
+        run: pwd
+
+      - name: List files in the repository
+        run: ls -al
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ vars.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Build the Docker image
+        run: docker compose build && docker tag ${{ vars.DOCKERHUB_USERNAME }}/bd-asterix:${{ github.head_ref || github.ref_name }}
+
+      - name: Push the Docker image
+        run: docker push ${{ vars.DOCKERHUB_USERNAME }}/bd-asterix:${{ github.head_ref || github.ref_name }}

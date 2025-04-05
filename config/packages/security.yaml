@@ -9,12 +9,16 @@ security:
             entity:
                 class: App\Entity\User
                 property: username
+        # OIDC provider personnalisé
+        oidc_user_provider:
+            id: App\Security\OidcUserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             pattern: ^/
+            provider: oidc_user_provider  # Utiliser le provider OIDC
             custom_authenticators:
                 - App\Security\AlbumAuthenticator
             logout:
