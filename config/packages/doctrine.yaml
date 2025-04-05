@@ -9,10 +9,12 @@ doctrine:
         # Pour éviter l'erreur getListDatabasesSQL
         override_url: true
 
-        # Configuration spécifique pour les migrations
-        driver_options:
-            foreign_key_constraints: true
-            ignore_platform_unsupported_methods: true # Cette option permet d'ignorer les méthodes non supportées
+        # Utilisation correcte des options driver
+        connections:
+            default:
+                driver_options:
+                    foreign_key_constraints: true
+                    ignore_platform_unsupported_methods: true # Cette option permet d'ignorer les méthodes non supportées
 
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
