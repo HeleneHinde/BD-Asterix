@@ -20,11 +20,14 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
 # Installer Yarn via npm
 RUN npm install --global yarn
 
-# Copier le fichier de configuration Apache
+# Copier les fichiers de configuration Apache
 COPY docker/images/symfony.conf /etc/apache2/sites-available/symfony.conf
+COPY docker/images/servername.conf /etc/apache2/conf-available/servername.conf
 
-# Activer le site Symfony et désactiver le site par défaut
-RUN a2ensite symfony.conf && a2dissite 000-default.conf
+# Activer le site Symfony, la configuration ServerName, et désactiver le site par défaut
+RUN a2ensite symfony.conf && \
+    a2enconf servername && \
+    a2dissite 000-default.conf
 
 # Activer les modules Apache nécessaires
 RUN a2enmod rewrite
