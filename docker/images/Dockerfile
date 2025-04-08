@@ -32,6 +32,8 @@ RUN a2enmod rewrite
 # Installer Composer (gestionnaire de dépendances PHP)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+
+
 # Définir le dossier de travail
 WORKDIR /var/www/html
 
@@ -43,10 +45,10 @@ RUN chown -R www-data:www-data /var/www/html
 
 # Définir des variables d'environnement pour le build
 ENV APP_ENV=prod \
-    APP_DEBUG=0 \
-    APP_SECRET=temporary_secret_for_build \
-    MESSENGER_TRANSPORT_DSN=doctrine://default \
-    APP_NO_DOT_ENV=1
+APP_DEBUG=0 \
+APP_SECRET=temporary_secret_for_build \
+MESSENGER_TRANSPORT_DSN=doctrine://default \
+APP_NO_DOT_ENV=1
 
 # Télécharger et installer Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -62,10 +64,8 @@ RUN chown -R www-data:www-data /var/www/html/var/data
 # Construire les assets
 RUN su www-data -s /bin/bash -c "yarn install && yarn build"
 
-# Copier l'entrypoint et le rendre exécutable
-COPY docker/entrypoint/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
 # Définir l'entrypoint
-ENTRYPOINT ["/entrypoint.sh"]
+# COPY --chmod source dest
+RUN chmod +x docker/entrypoint/entrypoint.sh
+ENTRYPOINT ["/bin/bash", "docker/entrypoint/entrypoint.sh"]
 CMD ["apache2-foreground"]
