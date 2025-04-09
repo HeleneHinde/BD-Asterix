@@ -5,7 +5,11 @@ on:
     branches:
       - main
       - master
+    paths-ignore:
+      - '.github/**'
   pull_request:
+    paths-ignore:
+      - '.github/**'
   workflow_dispatch:
 
 jobs:
@@ -36,3 +40,9 @@ jobs:
 
       - name: Notify Docker Hub build completion
         run: echo "Docker image has been built and pushed successfully."
+
+      - name: Trigger redeployment if master branch
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+        run: |
+          curl -X POST https://portainer.l00t.synology.me/api/stacks/webhooks/3be932f8-d01e-4323-bae5-f28e9cac8391
+          echo "Redeployment triggered successfully."
