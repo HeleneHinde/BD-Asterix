@@ -3,11 +3,12 @@
 .navbar {
   &-container {
     background-color: $lightgrey;
+    height: 50px;
 
   }
 
   &__link {
-    width: 100px;
+    width: 150px;
     height: 50px;
     display: flex;
     justify-content: center;

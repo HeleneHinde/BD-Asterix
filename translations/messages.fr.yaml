@@ -1,8 +1,7 @@
 #navigation
-type: Type
-list: Liste
-pokemon: Pokémon
-pokedex: Pokédex
+Albums: Albums
+Logout: Se déconnecter
 
-#Type List
-type.list: Liste des types
+#login
+push_for_connect: Cliquez sur le bouton ci-dessous pour vous connecter
+Welcome: Bienvenue sur le site de référence pour les BD Astérix de Camille 
