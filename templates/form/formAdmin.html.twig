@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Form
+{% endblock %}
+
+{% block body %}
+	<div class="form-container">
+		<h1 class="form-title">{{ 'Mettre à jour les albums possédés' | trans }}
+		</h1>
+		{{ form_start(form) }}
+		<table>
+			<tr>
+				<th>Nom</th>
+				<th>Possédé ?</th>
+			</tr>
+			{% for albumForm in form.albums %}
+				<tr>
+					<td>{{ albumForm.vars.data.name }}</td>
+					<td>{{ form_widget(albumForm.owned) }}</td>
+				</tr>
+			{% endfor %}
+		</table>
+		<button class="btn">Envoyer</button>
+		{{ form_end(form) }}
+
+	</div>
+
+{% endblock %}

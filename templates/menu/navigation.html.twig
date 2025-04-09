@@ -1,14 +1,23 @@
 <header>
-    <nav class="navbar-container">
-    {% if app.user %}
-        <ul class="navbar__link-container">
-            <a href="{{ path('app_album') }}">
-                <li class="navbar__link"> {{ 'Albums' | trans }}</li>
-            </a>
-            <a href="{{ path('app_logout') }}">
-                <li class="navbar__link"> {{ 'Logout' | trans }}</li>
-            </a>
-        </ul>
-    {% endif %}
-    </nav>
+	<nav class="navbar-container">
+		{% if app.user %}
+			<ul class="navbar__link-container">
+				<a href="{{ path('app_album') }}">
+					<li class="navbar__link">
+						{{ 'Albums' | trans }}</li>
+				</a>
+				{% if is_granted('ROLE_ADMIN') %}
+
+					<a href="{{ path('app_form_album_admin') }}">
+						<li class="navbar__link">
+							{{ 'Admin' | trans }}</li>
+					</a>
+				{% endif %}
+				<a href="{{ path('app_logout') }}">
+					<li class="navbar__link">
+						{{ 'Logout' | trans }}</li>
+				</a>
+			</ul>
+		{% endif %}
+	</nav>
 </header>
