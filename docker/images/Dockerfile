@@ -59,7 +59,7 @@ RUN su www-data -s /bin/bash -c "composer run-script post-install-cmd --no-inter
 RUN mkdir -p /var/www/html/var/data && touch /var/www/html/var/data/bd.sqlite
 
 # Assurer les bonnes permissions pour le fichier SQLite
-RUN chown -R www-data:www-data /var/www/html/var/data
+RUN chown -R www-data:www-data /var/www/html
 
 # Construire les assets
 RUN su www-data -s /bin/bash -c "yarn install && yarn build"
