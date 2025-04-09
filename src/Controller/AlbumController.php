@@ -29,7 +29,7 @@ class AlbumController extends AbstractController
     public function formAlbumsOwnedForAdmin(AlbumRepository $albumRepository, Request $request): Response
     {
 
-        $albums = $albumRepository->find([]);
+        $albums = $albumRepository->findAll();
 
         $form = $this->createForm(AlbumsCollectionType::class, ['albums' => $albums]);
         $form->handleRequest($request);
