@@ -26,7 +26,15 @@ class OidcUserProvider implements UserProviderInterface
             $user = new User();
             $user->setUsername($identifier);
             $user->setPassword(''); // Pas besoin de mot de passe avec OIDC
-            $user->setRoles(['ROLE_USER']);
+
+            switch ($identifier) {
+                case 'Hélène':
+                    $user->setRoles(['ROLE_ADMIN']);
+                    break;
+                default:
+                    $user->setRoles(['ROLE_USER']);
+                    break;
+            }
 
             $this->entityManager->persist($user);
             $this->entityManager->flush();
