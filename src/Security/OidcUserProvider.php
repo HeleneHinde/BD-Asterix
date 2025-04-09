@@ -29,6 +29,7 @@ class OidcUserProvider implements UserProviderInterface
 
             switch ($identifier) {
                 case 'Hélène':
+                case 'Erwan':
                     $user->setRoles(['ROLE_ADMIN']);
                     break;
                 default:
