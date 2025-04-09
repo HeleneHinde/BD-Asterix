@@ -8,6 +8,7 @@ var/sessions
 .env.local
 .env.local.php
 .env.test.local
+settings.json
 
 # Ignorer les fichiers git
 .git

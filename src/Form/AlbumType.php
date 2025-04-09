@@ -3,9 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Album;
-use App\Entity\Author;
-use App\Entity\Genre;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Type\CheckboxType;
