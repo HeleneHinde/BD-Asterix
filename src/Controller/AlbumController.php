@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\AlbumsCollectionType;
+use Doctrine\ORM\EntityManagerInterface;
 
 class AlbumController extends AbstractController
 {
@@ -26,7 +27,7 @@ class AlbumController extends AbstractController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/admin', name: 'app_form_album_admin')]
-    public function formAlbumsOwnedForAdmin(AlbumRepository $albumRepository, Request $request): Response
+    public function formAlbumsOwnedForAdmin(AlbumRepository $albumRepository, Request $request, EntityManagerInterface $em): Response
     {
 
         $albums = $albumRepository->findAll();
@@ -38,9 +39,9 @@ class AlbumController extends AbstractController
             $data = $form->getData()['albums'];
 
             foreach ($data as $album) {
-                $albumRepository->persist($album);
+                $em->persist($album);
             }
-            $albumRepository->flush();
+            $em->flush();
 
             $this->addFlash('success', 'Albums mis à jour');
             return $this->redirectToRoute('app_album');

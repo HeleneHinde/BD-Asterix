@@ -15,7 +15,7 @@
 			</tr>
 			{% for albumForm in form.albums %}
 				<tr>
-					<td>{{ albumForm.vars.data.name }}</td>
+					<td>{{ albumForm.vars.data.title }}</td>
 					<td>{{ form_widget(albumForm.owned) }}</td>
 				</tr>
 			{% endfor %}
