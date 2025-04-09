@@ -5,7 +5,7 @@ namespace App\Form;
 use App\Entity\Album;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AlbumType extends AbstractType
