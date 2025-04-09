@@ -44,5 +44,5 @@ jobs:
       - name: Trigger redeployment if master branch
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
         run: |
-          curl -X POST ${{ secrets.REDEPLOYMENT_URL }} \
+          curl -X POST ${{ secrets.REDEPLOYMENT_URL }}
           echo "Redeployment triggered successfully."
