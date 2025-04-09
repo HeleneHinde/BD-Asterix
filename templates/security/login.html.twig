@@ -3,18 +3,19 @@
 {% block title %}Connexion{% endblock %}
 
 {% block body %}
+    <div class="login-container">
+    <h1 class="login-title">{{ 'Welcome' | trans }} </h1>
 
-    <h1>Connexion</h1>
-
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ label }}">
-                {{ message }}
-            </div>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
 
-    <p>Cliquez sur le bouton ci-dessous pour vous connecter :</p>
-    <a href="{{ path('oidc_start') }}" class="btn">Se connecter</a>
-
-{% endblock %}
+        <p>{{ 'push_for_connect' | trans }} :</p>
+        <a href="{{ path('oidc_start') }}" class="login-btn">{{ 'Connexion' | trans }}</a>
+   </div>
+   
+   {% endblock %}
