@@ -32,9 +32,7 @@ security:
     access_control:
         - { path: ^/oidc-check, roles: PUBLIC_ACCESS }
         - { path: ^/oidc-start, roles: PUBLIC_ACCESS }
-        - { path: ^/login, roles: PUBLIC_ACCESS }
-        - { path: ^/, role: ROLE_USER }
-
+        - { path: ^/, roles: PUBLIC_ACCESS }
 
 
 when@test:
