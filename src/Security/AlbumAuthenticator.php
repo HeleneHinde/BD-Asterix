@@ -74,12 +74,12 @@ class AlbumAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        return new RedirectResponse('/'); // Redirige vers la page d'accueil ou une autre page.
+        return new RedirectResponse('/album'); // Redirige vers la page d'accueil ou une autre page.
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        $request->getSession()->getFlashBag()->add('error', 'Échec de l\'authentification: ' . $exception->getMessage());
-        return new RedirectResponse('/login'); // Redirige vers la page de login.
+        $request->getSession()->set('error', 'Échec de l\'authentification: ' . $exception->getMessage());
+        return new RedirectResponse('/'); // Redirige vers la page de login.
     }
 }

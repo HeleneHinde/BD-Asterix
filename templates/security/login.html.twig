@@ -1,21 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion{% endblock %}
+{% block title %}Connexion
+{% endblock %}
 
 {% block body %}
-    <div class="login-container">
-    <h1 class="login-title">{{ 'Welcome' | trans }} </h1>
+	<div class="login-container">
+		<h1 class="login-title">{{ 'Welcome' | trans }}
+		</h1>
+		<p>{{ 'push_for_connect' | trans }}
+			:</p>
+		<a href="{{ path('oidc_start') }}" class="login-btn">{{ 'Connexion' | trans }}</a>
+	</div>
 
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-
-        <p>{{ 'push_for_connect' | trans }} :</p>
-        <a href="{{ path('oidc_start') }}" class="login-btn">{{ 'Connexion' | trans }}</a>
-   </div>
-   
-   {% endblock %}
+{% endblock %}

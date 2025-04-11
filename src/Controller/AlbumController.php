@@ -14,7 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class AlbumController extends AbstractController
 {
     #[IsGranted('ROLE_USER')]
-    #[Route('/', name: 'app_album')]
+    #[Route('/album', name: 'app_album')]
     public function listAlbums(AlbumRepository $albumRepository): Response
     {
         // Fetch all albums from the repository

@@ -11,7 +11,7 @@ use League\OAuth2\Client\Provider\GenericProvider;
 
 class SecurityController extends AbstractController
 {
-    #[Route('/login', name: 'oidc_login')]
+    #[Route('/', name: 'oidc_login')]
     public function login(): Response
     {
         // Rendu simple du template de login
@@ -19,9 +19,9 @@ class SecurityController extends AbstractController
     }
 
     #[Route(path: '/logout', name: 'app_logout')]
-    public function logout(): void
+    public function logout(): Response
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        return $this->redirectToRoute('oidc_login');
     }
 
     #[Route('/oidc-check', name: 'oidc_check')]
