@@ -18,7 +18,6 @@ fi
 php bin/console cache:clear --no-warmup
 
 # Exécuter les migrations de base de données en utilisant les variables d'environnement
-php bin/console doctrine:database:create --if-not-exists --no-interaction
 php bin/console doctrine:migration:migrate --no-interaction
 
 git config --global --add safe.directory /var/www/html
