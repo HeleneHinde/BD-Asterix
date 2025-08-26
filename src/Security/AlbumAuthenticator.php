@@ -55,6 +55,7 @@ class AlbumAuthenticator extends AbstractAuthenticator
             
             // Récupère les informations de l'utilisateur
             $resourceOwner = $this->oidcProvider->getResourceOwner($accessToken);
+            error_log(print_r($resourceOwner->toArray(), true));
             $userData = $resourceOwner->toArray();
             
             // Extraire l'identifiant unique de l'utilisateur
